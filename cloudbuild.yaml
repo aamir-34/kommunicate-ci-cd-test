@@ -1,0 +1,28 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build
+  args:
+  - 'build'
+  - '-t'
+  - 'us-east4-docker.pkg.dev/high-splicer-429006-m7/kommunicate-test'
+  - '.'
+
+- name: 'gcr.io/cloud-builders/docker'
+  id: Push
+  args:
+  - 'push'
+  - 'us-east4-docker.pkg.dev/high-splicer-429006-m7/kommunicate-test'
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Deploy
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+         PROJECT=$$(gcloud config get-value core/project)          
+         gke-gcloud-auth-plugin --version
+         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+         gcloud container clusters get-credentials "testing-cluster" --project "high-splicer-429006-m7"  --zone "europe-west1-b"  
+         kubectl apply -f deploy.yaml
+
+admin0810@cloudshell:~/web-html-app (project111-id)$
