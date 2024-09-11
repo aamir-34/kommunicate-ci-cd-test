@@ -1,22 +1,5 @@
-# Dockerfile
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
-
-# Set the working directory in the container
+FROM python:latest
 WORKDIR /app
-
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Install Python dependencies
-RUN pip install flask
-
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
-
-# Define environment variable
-ENV NAME World
-
-# Run app.py when the container launches
+ADD . /app
+RUN pip install Flask
 CMD ["python", "app.py"]
-
