@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app
+spec:
+  type: LoadBalancer
+  selector:
+    app: web-app
+  ports:
+    - port: 80
+      targetPort: 80
+admin0810@cloudshell:~/web-html-app (project111-id)$ 

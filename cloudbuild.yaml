@@ -1,4 +1,4 @@
-steps:
+ steps:
 - name: 'gcr.io/cloud-builders/docker'
   id: Build
   args:
@@ -19,10 +19,10 @@ steps:
   args:
     - '-c'
     - |
-         PROJECT=$$(gcloud config get-value core/project)          
+         PROJECT=$$(gcloud config get-value core/project)
          gke-gcloud-auth-plugin --version
          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-         gcloud container clusters get-credentials "testing-cluster" --project "high-splicer-429006-m7"  --zone "europe-west1-b"  
+         gcloud container clusters get-credentials "testing-cluster" --project "high-splicer-429006-m7"  --zone "us-east4"
          kubectl apply -f deploy.yaml
+         kubectl apply -f service.yaml
 
-admin0810@cloudshell:~/web-html-app (project111-id)$
