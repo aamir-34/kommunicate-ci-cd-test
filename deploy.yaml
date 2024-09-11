@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-app
+  namespace: kommunicate-ci-cd 
 spec:
   replicas: 1
   selector:
@@ -14,6 +15,6 @@ spec:
     spec:
       containers:
         - name: web-app
-          image: us-east4-docker.pkg.dev/high-splicer-429006-m7/kommunicate-test
+          image: us-central1-docker.pkg.dev/high-splicer-429006-m7/kommunicate-repo-image/web-app1:image_tag
           ports:
             - containerPort: 80

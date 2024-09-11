@@ -1,27 +1,41 @@
-isteps:
-  # Step 1: Build the Docker Image and push to Artifact Registry
+steps:
   - name: 'gcr.io/cloud-builders/docker'
-    id: BuildAndPush
-    entrypoint: 'bash'
+    id: Build
     args:
-      - '-c'
-      - |
-        docker build -t us-central1-docker.pkg.dev/high-splicer-429006-m7/kommunicate-repo-image:latest .
-        docker push us-central1-docker.pkg.dev/high-splicer-429006-m7/kommunicate-repo-image:latest
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/high-splicer-429006-m7/kommunicate-repo-image/web-app1:v5'
+      - '.'
 
-  # Step 2: Deploy to GKE
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Push
+    args:
+      - 'push'
+      - 'us-central1-docker.pkg.dev/high-splicer-429006-m7/kommunicate-repo-image/web-app1:v5'
+
   - name: 'gcr.io/cloud-builders/gcloud'
     id: Deploy
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        gke-gcloud-auth-plugin --version
-        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-        gcloud container clusters get-credentials "testing-cluster" --project "high-splicer-429006-m7" --zone "us-central1"
-        kubectl apply -f deploy.yaml
-        kubectl apply -f service.yaml
+          gke-gcloud-auth-plugin --version
+          export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+          gcloud container clusters get-credentials "testing-cluster" --project "high-splicer-429006-m7" --zone "us-central1"
+          sed -i 's/:image_tag/:v5/' deploy.yaml
+          kubectl apply -f deploy.yaml
+          kubectl apply -f service.yaml
+          kubectl apply -f ingress.yaml
 
-images:
-  - 'us-central1-docker.pkg.dev/high-splicer-429006-m7/kommunicate-repo-image:latest'
 
+
+
+#availableSecrets:
+# secretManager:
+# - versionName:
+#   env: 
+# - versionName:
+#   env: 
+#options:
+#logging: CLOUD_LOGGING_ONLY
+#workerPool: 'projects/high-splicer-429006-m7/locations/us-east4/workerPools/private-pool-01'          
