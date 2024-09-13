@@ -29,8 +29,7 @@ steps:
 
 
 
-
-#availableSecrets:
+##availableSecrets:
 # secretManager:
 # - versionName:
 #   env: 
